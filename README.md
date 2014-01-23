@@ -3,7 +3,7 @@ common
 
 Dependencies
 ------------
-Junit in compiletime classpath
+Junit in compiletime classpath  
 MySQL-driver in runtime classpath 
 
 Overview
@@ -87,14 +87,14 @@ Alphanumeric (NaturalComparator) sort
 -----------------
 If you have strings like this (think of version strings):
 
-version-1.0.1
-version-1.70.1
+version-1.0.1  
+version-1.70.1  
 version-1.9.1
 
 They should be sorted like this with alphanumeric sort:
 
-version-1.0.1
-version-1.9.1
+version-1.0.1  
+version-1.9.1  
 version-1.70.1
 
 This make sense for some types of strings. There has been put down some effort to speed up the comparison, each compare takes 9200 ns on one particular laptop some years ago.
