@@ -12,22 +12,15 @@ import com.owera.common.log.Logger;
 import com.owera.common.util.PropertyReader;
 
 /**
- * This connection provider can offer
- * 	- connection pooling
- * 		- specify max connections
- * 		- specify max age
- * 		- throw away all connection involved in SQLExceptions
- * 	- connection meta data
- * 		- count successful accesses
- * 		- count rejected accesses
- * 		- count simultaneous accesses
- * 		- count free connections/used connections
- * 	- multiple database connections (connect to several
- * 		different db in the same runtime/JVM)
- * 	- logging of all events and debug-logging, standard log4j
- *  - possible to decide to run without autocommit=true
- *  - tested and works fine on MySQL and Oracle. Should work on
- *  	any Database supporting JDBC.
+ * This connection provider can offer - connection pooling - specify max
+ * connections - specify max age - throw away all connection involved in
+ * SQLExceptions - connection meta data - count successful accesses - count
+ * rejected accesses - count simultaneous accesses - count free connections/used
+ * connections - multiple database connections (connect to several different db
+ * in the same runtime/JVM) - logging of all events and debug-logging, standard
+ * log4j - possible to decide to run without autocommit=true - tested and works
+ * fine on MySQL and Oracle. Should work on any Database supporting JDBC.
+ * 
  * @author morten
  */
 
@@ -44,10 +37,10 @@ public class ConnectionProvider {
 	}
 
 	/**
-	 * Use this method if you want to control the autoCommit feature of
-	 * the connection. IMPORTANT! If you use this method, you should
-	 * make sure than NO ONE ELSE (e.g. another app/user/whateever)
-	 * is reusing the same connection without going through this method.
+	 * Use this method if you want to control the autoCommit feature of the
+	 * connection. IMPORTANT! If you use this method, you should make sure than
+	 * NO ONE ELSE (e.g. another app/user/whateever) is reusing the same
+	 * connection without going through this method.
 	 */
 	public static Connection getConnection(ConnectionProperties props, boolean autoCommit) throws SQLException, NoAvailableConnectionException {
 		Connection c = getConnection(props);
@@ -112,7 +105,7 @@ public class ConnectionProvider {
 		} else {
 			try {
 				Connection c = cpd.getFreeConn().pop();
-				if (cpd.getAllConn().get(c) < 0) { //marked as old
+				if (cpd.getAllConn().get(c) < 0) { // marked as old
 					cpd.getAllConn().put(c, -2l);
 					connMap.remove(c);
 					return getConnectionImpl(props);
@@ -134,38 +127,43 @@ public class ConnectionProvider {
 	}
 
 	/**
-	 * This method allows you to specify database credentials in a property file if you specify file name and database-property-key.
+	 * This method allows you to specify database credentials in a property file
+	 * if you specify file name and database-property-key.
 	 * 
 	 * Given a property file with this content:
 	 * 
 	 * mydb.url = morten/morten@jdbc:mysql://xaps-a.owera.com:3306/xaps
-	 * mydb.maxconn = 10
-	 * mydb.maxage = 600
+	 * mydb.maxconn = 10 mydb.maxage = 600
 	 * 
-	 * This method will need to know the name of this file and the key "mydb" to read and populate the ConnectionProperties object.
+	 * This method will need to know the name of this file and the key "mydb" to
+	 * read and populate the ConnectionProperties object.
 	 * 
-	 * url syntax: 
-	 * <user>/<password>@<jdbc-url-including-dbname>
-	 * maxage: (Connection will be taken out of the pool at this point - will not abort running queries/executions)
-	 * Specified in seconds. Default is 600.
-	 * maxconn:
-	 * Specified in number of connections. Default is 10.
+	 * url syntax: <user>/<password>@<jdbc-url-including-dbname> maxage:
+	 * (Connection will be taken out of the pool at this point - will not abort
+	 * running queries/executions) Specified in seconds. Default is 600.
+	 * maxconn: Specified in number of connections. Default is 10.
 	 * 
 	 * 
-	 * Another feature is "symlinks", where one property points to an already defined db-property
+	 * Another feature is "symlinks", where one property points to an already
+	 * defined db-property
 	 * 
-	 * anotherdb = mydb 
+	 * anotherdb = mydb
 	 * 
-	 * With this setup, the property file can contain the option of having several database connections (to various database), but also
-	 * to be setup to point to the same database. 
+	 * With this setup, the property file can contain the option of having
+	 * several database connections (to various database), but also to be setup
+	 * to point to the same database.
 	 * 
-	 * @param propertyfile - the name of the property file containing database credentials/url and possibly maxage/maxconn
-	 * @param dbkey - the key used in one or more properties to identify the credentials/url and possibly maxage/maxconn
+	 * @param propertyfile
+	 *            - the name of the property file containing database
+	 *            credentials/url and possibly maxage/maxconn
+	 * @param dbkey
+	 *            - the key used in one or more properties to identify the
+	 *            credentials/url and possibly maxage/maxconn
 	 * @return
 	 */
 	public static ConnectionProperties getConnectionProperties(String propertyfile, String dbkey) {
 		// TODO: Change signature of method: propertyfile, dbname
-		// TODO: Read user/password/url/maxage/maxconn from propertyfile 
+		// TODO: Read user/password/url/maxage/maxconn from propertyfile
 		PropertyReader pr = new PropertyReader(propertyfile);
 
 		// Symlink check
@@ -180,11 +178,13 @@ public class ConnectionProvider {
 		// Find database credentials and url:
 		String url = pr.getProperty(dbkey + ".url");
 		if (url == null)
-			url = pr.getProperty(dbkey); // Backward compatibility - a little ugly and non-explicit
+			url = pr.getProperty(dbkey); // Backward compatibility - a little
+											// ugly and non-explicit
 		if (url == null)
 			return null;
 
-		// url is now hopefully a proper configuration on the form <user>/<password>@<jdbc-url-including-dbname>
+		// url is now hopefully a proper configuration on the form
+		// <user>/<password>@<jdbc-url-including-dbname>
 		ConnectionProperties props = new ConnectionProperties();
 		try {
 			props.setUrl(url.substring(url.indexOf("@") + 1));
@@ -211,11 +211,19 @@ public class ConnectionProvider {
 				log.warn(maxConn + " is not a number, default value (10) will be used");
 			}
 		}
-		
+
 		if (props.getUrl().indexOf("mysql") > -1)
-			props.setDriver("com.mysql.jdbc.Driver"); // This class must be specified in the classpath (dynamically loaded)
+			props.setDriver("com.mysql.jdbc.Driver"); // This class must be
+														// specified in the
+														// classpath
+														// (dynamically loaded)
 		else if (props.getUrl().indexOf("oracle") > -1)
-			props.setDriver("oracle.jdbc.driver.OracleDriver"); // This class must be specified in the classpath (dynamically loaded)
+			props.setDriver("oracle.jdbc.driver.OracleDriver"); // This class
+																// must be
+																// specified in
+																// the classpath
+																// (dynamically
+																// loaded)
 		else
 			throw new IllegalArgumentException("The url is not pointing to a MySQL or Oracle database");
 		return props;
@@ -235,20 +243,8 @@ public class ConnectionProvider {
 			ConnectionProperties props = cpd.getProps();
 			Class.forName(props.getDriver()).newInstance();
 			Connection c = DriverManager.getConnection(props.getUrl(), props.getUser(), props.getPassword());
-			if (props.getDriver().indexOf("mysql") > -1) {
-				s = c.createStatement();
-				s.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED");
-			}
-			if (props.getDriver().indexOf("oracle") > -1 && cpd.isNewOracleVersion()) {
-				s = c.createStatement();
-				try {
-					s.execute("ALTER SESSION SET NLS_COMP=LINGUISTIC");
-					s.execute("ALTER SESSION SET NLS_SORT=BINARY_AI");
-				} catch (Throwable t) {
-					cpd.setNewOracleVersion(false);
-					log.warn("This Oracle version is below 10.2 and will not support case and accent insensitive searches.");
-				}
-			}
+			s = c.createStatement();
+			s.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED");
 			cpd.getUsedConn().put(c, new Long(System.currentTimeMillis()));
 			cpd.getAllConn().put(c, new Long(System.currentTimeMillis()));
 			connMap.put(c, cpd);
@@ -275,14 +271,13 @@ public class ConnectionProvider {
 	}
 
 	/**
-	 * Returns a connection to the pool. 
-	 *
-	 * If the connection is associated by a an SQL-exception or
-	 * if it's too old, then the connection is not put back
-	 * into the pool. If not, we check to see if the connection is
-	 * closed or not. if it's closed ('accidentally' by an application
-	 * it is not returned to the pool). But those that passes these
-	 * tests are of course returned to the pool.
+	 * Returns a connection to the pool.
+	 * 
+	 * If the connection is associated by a an SQL-exception or if it's too old,
+	 * then the connection is not put back into the pool. If not, we check to
+	 * see if the connection is closed or not. if it's closed ('accidentally' by
+	 * an application it is not returned to the pool). But those that passes
+	 * these tests are of course returned to the pool.
 	 */
 	public static synchronized void returnConnection(Connection c, SQLException sqle) {
 		ConnectionPoolData cpd = null;
