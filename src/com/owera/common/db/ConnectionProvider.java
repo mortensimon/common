@@ -12,14 +12,20 @@ import com.owera.common.log.Logger;
 import com.owera.common.util.PropertyReader;
 
 /**
- * This connection provider can offer - connection pooling - specify max
- * connections - specify max age - throw away all connection involved in
- * SQLExceptions - connection meta data - count successful accesses - count
- * rejected accesses - count simultaneous accesses - count free connections/used
- * connections - multiple database connections (connect to several different db
- * in the same runtime/JVM) - logging of all events and debug-logging, standard
- * log4j - possible to decide to run without autocommit=true - tested and works
- * fine on MySQL and Oracle. Should work on any Database supporting JDBC.
+ * This connection provider can offer 
+ * - connection pooling 
+ * - specify max connections 
+ * - specify max age 
+ * - throw away all connection involved in SQLExceptions 
+ * - connection meta data 
+ * - count successful accesses 
+ * - count rejected accesses 
+ * - count simultaneous accesses 
+ * - count free connections/used connections 
+ * - multiple database connections (connect to several different db in the same runtime/JVM) 
+ * - logging of all events and debug-logging 
+ * - possible to decide to run without autocommit=true 
+ * - tested and works fine on MySQL. Should work on any Database supporting JDBC.
  * 
  * @author morten
  */
@@ -213,19 +219,9 @@ public class ConnectionProvider {
 		}
 
 		if (props.getUrl().indexOf("mysql") > -1)
-			props.setDriver("com.mysql.jdbc.Driver"); // This class must be
-														// specified in the
-														// classpath
-														// (dynamically loaded)
-		else if (props.getUrl().indexOf("oracle") > -1)
-			props.setDriver("oracle.jdbc.driver.OracleDriver"); // This class
-																// must be
-																// specified in
-																// the classpath
-																// (dynamically
-																// loaded)
+			props.setDriver("com.mysql.jdbc.Driver"); // This class must be specified in the classpath (dynamically loaded)
 		else
-			throw new IllegalArgumentException("The url is not pointing to a MySQL or Oracle database");
+			throw new IllegalArgumentException("The url is not pointing to a MySQL database");
 		return props;
 	}
 
