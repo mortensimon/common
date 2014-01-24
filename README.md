@@ -34,15 +34,15 @@ Database connection pooling
 ---------------------------
 Initially this was developed two escape dependency on Websphere database connection handling. These days I'm not sure how relevant this is, Apache commons DBCP is most likely a much better alternative (I have not investigated it). The main idea was to
 
-- offer connection pooling without any dependency to application servers
-- throw away all connection involved in SQLExceptions - all connections are returned explicitly back to this framework
-- count connection meta data (successful accesses, rejected accesses, simultaneous accesses, free/used connections)
-- multiple database connections (connect to several different db in the same runtime/JVM) 
-- logging of all events and debug-logging 
-- retries if rejected (some seconds) - hoping to overcome a temporary peak situation
-- possible to dynamically decide to run with and without autocommit=true 
-- tested and works fine on MySQL. Should work on any Database supporting JDBC.
-- configurable both through property files and through coding (your choice).
+* offer connection pooling without any dependency to application servers
+* throw away all connection involved in SQLExceptions - all connections are returned explicitly back to this framework
+* count connection meta data (successful accesses, rejected accesses, simultaneous accesses, free/used connections)
+* multiple database connections (connect to several different db in the same runtime/JVM) 
+* logging of all events and debug-logging 
+* retries if rejected (some seconds) - hoping to overcome a temporary peak situation
+* possible to dynamically decide to run with and without autocommit=true 
+* tested and works fine on MySQL. Should work on any Database supporting JDBC.
+* configurable both through property files and through coding (your choice).
 
 All in all, this system has worked reasonably well for many years.
 
@@ -50,19 +50,19 @@ Log4j replacement
 -----------------
 I had used Log4j for many years, when I one day had enough of it. Classpath conflicts was one issue, since log4j was often used both in the application server and in my application. But the main driver was a number of other issues that this replacement fixes (IMHO):
 
-	- no conflicts with log4j-libraries in J2EE-server => no need to think of classloader-strategies
-	- simpler/better configuration - easier for customers/documentation
-		- specify roll-on-size/time in one appender-configuration (e.g. roll log every 1 hour or if size > 1M)
-		- specify backups for roll-on-time (for automatic cleanup in production environment)
-		- no need to specify root-logger
-		- no need to specify inheritance
-		- automatic report of configuration-errors -> easy to correct
-	- automatic roll-on-time, even with no log-traffic!
-	- automatic roll-on-time in startup (an old log will be rolled out to correct file name)
-	- filename suffix convention kept in case of backups, to allow ease of use with editors (no .1 suffix anymore!)  
-	- performance increased with up to 300% (some cases - no increase) 
-	- complete dynamic reload of configuration - everything can change runtime!
-	- supports the Syslog-severity hierarchy (plus FATAL from log4j)
+* no conflicts with log4j-libraries in J2EE-server => no need to think of classloader-strategies
+* simpler/better configuration - easier for customers/documentation
+	- specify roll-on-size/time in one appender-configuration (e.g. roll log every 1 hour or if size > 1M)
+	- specify backups for roll-on-time (for automatic cleanup in production environment)
+	- no need to specify root-logger
+	- no need to specify inheritance
+	- automatic report of configuration-errors -> easy to correct
+* automatic roll-on-time, even with no log-traffic!
+* automatic roll-on-time in startup (an old log will be rolled out to correct file name)
+* filename suffix convention kept in case of backups, to allow ease of use with editors (no .1 suffix anymore!)  
+* performance increased with up to 300% (some cases - no increase) 
+* complete dynamic reload of configuration - everything can change runtime!
+* supports the Syslog-severity hierarchy (plus FATAL from log4j)
 
 Of course, some features of log4j has been sacrificed. Even though it it possible to write new Appender-types (writing to 
 database instead of file), it is perhaps not what this replacement library does best. The syntax/options of what can be printed
