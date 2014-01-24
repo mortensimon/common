@@ -3,8 +3,15 @@ common
 
 Dependencies
 ------------
-Junit in compiletime classpath  
+Junit in compile time classpath  
 MySQL-driver in runtime classpath 
+
+Eclipse setup
+-------------
+Git view: Import git repo
+Git view: Import projects from git repo, import as general project
+Package/Navigator view: Change project facets to Java 1.7
+Add Junit to classpath
 
 Overview
 --------
