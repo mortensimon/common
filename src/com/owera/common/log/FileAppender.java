@@ -405,7 +405,7 @@ public class FileAppender extends Appender {
     String debugStr = propertyReader.getProperty(appenderName + ".debug");
     if (debugStr != null && (debugStr.equals("1") || debugStr.equalsIgnoreCase("true") || debugStr.equalsIgnoreCase("yes") || debugStr.equalsIgnoreCase("on")))
       debug = true;
-    String backupDirName = propertyReader.getProperty("log.backup-directory");
+    String backupDirName = propertyReader.getProperty("backup-directory");
     if (backupDirName == null)
       backupDir = new File("backup-logs");
     else

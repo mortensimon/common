@@ -1,5 +1,5 @@
 v1.33.13 (2014-04-04)
-- ref: Backup-directory can now be specified in property-file using log.backup-directory property. Defaults to "backup-logs" in working diretory.
+- ref: Backup-directory can now be specified in property-file using backup-directory property. Defaults to "backup-logs" in working diretory.
 v1.33.12 (2013-08-14)
 - add: Callback-function in cache-cleanup (to notify when something is removed from cache)
 v1.33.11 (2013-04-18)
